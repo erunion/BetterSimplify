@@ -6,8 +6,8 @@ module.exports = {
 	browsers : {
 
 		chrome : {
-			name : "Simplify.chromeextension",
-			version : "1.7.2",
+			name : "BetterSimplify.chromeextension",
+			version : "1.0.0",
 		}
 
 	},
