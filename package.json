@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Simplify Web Players suite with auto-build system.",
   "scripts": {
-    "gulp": "./node_modules/gulp/bin/gulp.js"
+    "gulp": "./node_modules/gulp/bin/gulp.js",
+    "lint": "standard config.js gulpfile.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,9 @@
     "standard": "^7.1.2"
   },
   "standard": {
-    "globals": ["$", "Simplify"]
+    "globals": [
+      "$",
+      "Simplify"
+    ]
   }
 }

@@ -1,111 +1,109 @@
-'use strict';
+var gulp = require('gulp')
+var fs = require('fs')
+var fsextra = require('fs-extra')
+var util = require('util')
+var path = require('path')
+var glob = require('glob')
+var underscore = require('underscore')
+var lineReader = require('line-reader')
+var ejs = require('ejs')
+var config = require('./config')
+var userOptions = require('minimist')(process.argv.slice(2))
 
-var gulp = require('gulp'),
-  fs = require('fs'),
-  fsextra = require('fs-extra'),
-  util = require('util'),
-  path = require('path'),
-  glob = require('glob'),
-  underscore = require('underscore'),
-  lineReader = require('line-reader'),
-  ejs = require('ejs'),
-  config = require('./config'),
-  userOptions = require('minimist')(process.argv.slice(2));
-
-var allPlayers = {},
-  allHosts = {};
+var allPlayers = {}
+var allHosts = {}
 
 /* Loading information about all the available players */
 
-function collectPlayersInfo() {
+function collectPlayersInfo () {
   for (var filename in allPlayers) {
-    if (allPlayers[filename]['hostname'] == null){
+    if (allPlayers[filename]['hostname'] == null) {
       console.error(
         'Warning. Skipping the player at "%s" because it doesn\'t contain a properly formatted set of headers.',
         filename
-      );
+      )
 
-      delete allPlayers[filename];
-      continue;
+      delete allPlayers[filename]
+      continue
     }
 
-    allPlayers[filename].hostname.split(' ').forEach(function(hostname) {
-      allHosts[hostname] = filename;
-    });
+    allPlayers[filename].hostname.split(' ').forEach(function (hostname) {
+      allHosts[hostname] = filename
+    })
   }
 }
 
-function loadPlayers(done) {
+function loadPlayers (done) {
   if (allPlayers.length > 0) {
-    return;
+    return
   }
 
-  glob(path.join(config.playersDir, '*.js'), function(er, files) {
-    console.log('Found %d players. Starting processing them.', files.length);
+  glob(path.join(config.playersDir, '*.js'), function (er, files) {
+    console.log('Found %d players. Starting processing them.', files.length)
 
-    var processedFiles = 0;
+    var processedFiles = 0
 
-    files.forEach(function(filename) {
-      console.log('Processing "%s"...', filename);
+    files.forEach(function (filename) {
+      console.log('Processing "%s"...', filename)
 
       // Getting the existing params
       if (allPlayers[filename] == null) {
-        allPlayers[filename] = {};
+        allPlayers[filename] = {}
       }
 
       // Reading file line by line
-      lineReader.eachLine(filename, function(line, last, callback) {
-        line = line.trim();
+      lineReader.eachLine(filename, function (line, last, callback) {
+        line = line.trim()
 
         if (line.indexOf('//') === 0) {
           // Checking if we have components in this comment
-          var components = line.substring(3).match(/@([a-z+_\-]+)\s*=\s*(.+)/i);
+          var components = line.substring(3).match(/@([a-z+_\-]+)\s*=\s*(.+)/i)
 
-          if (components == null) {
-            callback();
-            return;
+          if (components === null) {
+            callback()
+            return
           }
 
           // Getting the component name
-          var name = components[1].trim().toLowerCase();
-          var value = components[2].trim();
+          var name = components[1].trim().toLowerCase()
+          var value = components[2].trim()
 
           // Saving the params
-          allPlayers[filename][name] = value;
+          allPlayers[filename][name] = value
 
-          callback();
+          callback()
         } else {
-          callback(false);
+          callback(false)
         }
-      }).then(function() {
-        processedFiles++;
-        if (processedFiles == files.length) {
-          collectPlayersInfo();
+      }).then(function () {
+        processedFiles++
+        if (processedFiles === files.length) {
+          collectPlayersInfo()
 
-          console.log('All players have been processed.');
-          done();
+          console.log('All players have been processed.')
+          done()
         }
-      });
-    });
-  });
+      })
+    })
+  })
 }
 
-function buildBrowserFiles(browser, outputDir, built) {
+function buildBrowserFiles (browser, outputDir, built) {
   // Logging the information about the current browser
-  console.log('Building a %s extension...', browser.charAt(0).toUpperCase() + browser.slice(1));
-  console.log('Output will be saved to "%s".', outputDir);
+  console.log('Building a %s extension...', browser.charAt(0).toUpperCase() + browser.slice(1))
+  console.log('Output will be saved to "%s".', outputDir)
 
   // Creating the directory
-  fsextra.ensureDirSync(outputDir);
+  fsextra.ensureDirSync(outputDir)
 
   // Copying players and the core script to the destination directory
   console.log('Copying players and the core script...')
 
-  fsextra.copySync(config.playersDir, path.join(outputDir, 'data'));
-  fsextra.copySync(config.simplifyCoreScript, path.join(outputDir, 'data', path.basename(config.simplifyCoreScript)));
+  fsextra.copySync(config.playersDir, path.join(outputDir, 'data'))
+  fsextra.copySync(config.simplifyCoreScript, path.join(outputDir, 'data', path.basename(config.simplifyCoreScript)))
 
   // Rendering our templates from the skeleton
-  var skeletonPath = path.join(config.skeletonDir, browser);
+  var skeletonPath = path.join(config.skeletonDir, browser)
 
   // Preparing parameters for templating the skeleton
   var skeletonTemplate = {
@@ -122,82 +120,87 @@ function buildBrowserFiles(browser, outputDir, built) {
   }
 
   // Rendering the skeleton to the disk
-  console.log('Creating extension files from the skeleton...');
+  console.log('Creating extension files from the skeleton...')
 
-  glob(path.join(skeletonPath, '*'), function(err, files) {
+  glob(path.join(skeletonPath, '*'), function (err, files) {
+    if (err) {
+      throw err
+    }
+
     for (var i = 0; i < files.length; i++) {
-      var filename = files[i],
-        outputFilename = path.join(outputDir, path.basename(filename));
+      var filename = files[i]
+      var outputFilename = path.join(outputDir, path.basename(filename))
 
       if (filename.indexOf('.template') !== -1) {
-        console.log('Rendering template "%s"...', path.basename(filename));
+        console.log('Rendering template "%s"...', path.basename(filename))
 
         fs.writeFile(
           outputFilename.replace('.template', ''),
           ejs.render(String(fs.readFileSync(filename)), skeletonTemplate)
-        );
+        )
       } else {
-        console.log('Copying file "%s"...', path.basename(filename));
-        fsextra.copySync(filename, outputFilename);
+        console.log('Copying file "%s"...', path.basename(filename))
+        fsextra.copySync(filename, outputFilename)
       }
     }
 
-    console.log('Finished creating the %s extension.', browser.charAt(0).toUpperCase() + browser.slice(1));
+    console.log('Finished creating the %s extension.', browser.charAt(0).toUpperCase() + browser.slice(1))
 
-    built();
-  });
+    built()
+  })
 }
 
 /* Publicly available exported gulp tasks */
 
-gulp.task('build', function(done) {
+gulp.task('build', function (done) {
   // Getting the list of all browsers names
-  var availableBrowsers = Object.keys(config.browsers);
+  var availableBrowsers = Object.keys(config.browsers)
 
   // Filtering the list on '--browser=name' option
   if (userOptions['browser'] != null) {
     availableBrowsers = [
       userOptions['browser']
-    ];
+    ]
   }
 
   // Numbers of all browsers and browsers already processed
-  var processedBrowsers = 0, totalBrowsers = availableBrowsers.length;
+  var processedBrowsers = 0
+  var totalBrowsers = availableBrowsers.length
 
   // Checking if we need to clean firstly when '--clean' is supplied
   if (userOptions['clean'] != null) {
     console.log('Cleaning the build output directory...')
-    fsextra.emptyDirSync(config.buildDir);
+    fsextra.emptyDirSync(config.buildDir)
   } else {
     console.log('Build output directory will not be cleaned.')
   }
 
   // Callback method
-  var built = function() {
-    if (++processedBrowsers == totalBrowsers) {
+  var built = function () {
+    if (++processedBrowsers === totalBrowsers) {
       console.log('All done.')
-      done();
+      done()
     }
   }
 
-  availableBrowsers.forEach(function(browser) {
-    var outputDir = path.join(config.buildDir, config.browsers[browser].name);
-    buildBrowserFiles(browser, outputDir, built);
-  });
-});
-
-gulp.task('clean', function(done) {
-  console.log('Cleaning the build output directory...')
-  fsextra.emptyDirSync(config.buildDir);
-  done();
+  availableBrowsers.forEach(function (browser) {
+    var outputDir = path.join(config.buildDir, config.browsers[browser].name)
+    buildBrowserFiles(browser, outputDir, built)
+  })
 })
 
-gulp.task('default', gulp.series(loadPlayers, 'build'), function() {
-  // Intentionally empty
-});
+gulp.task('clean', function (done) {
+  console.log('Cleaning the build output directory...')
+  fsextra.emptyDirSync(config.buildDir)
+  done()
+})
 
-gulp.task('watch', function() {
-  console.log('Watching source extension files for changes...');
+gulp.task('default', gulp.series(loadPlayers, 'build'), function () {
+  // Intentionally empty
+})
+
+gulp.task('watch', function () {
+  console.log('Watching source extension files for changes...')
 
   var watcher = gulp.watch(
     [
@@ -206,9 +209,9 @@ gulp.task('watch', function() {
       path.join(config.playersDir, '*.js')
     ],
     gulp.series(loadPlayers, 'build')
-  );
+  )
 
-  watcher.on('change', function(event) {
-    console.log('Rebuilding extensions...');
-  });
-});
+  watcher.on('change', function (event) {
+    console.log('Rebuilding extensions...')
+  })
+})
