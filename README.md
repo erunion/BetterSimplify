@@ -8,7 +8,7 @@ This repository contains source code to interact with [Simplify](http://mmth.us/
 
 ### Directory structure
 
-The repository contains files that are necessary to build extensions for Google Chrome and Safari. 
+The repository contains files that are necessary to build extensions for Google Chrome
 
 * `build/` contains the resulting directories with the production-ready extensions. You may not directly modify files in this directory, but instead you modify source files and use `gulp` to rebuild extensions again.
 
@@ -30,7 +30,7 @@ When you installed all the necessary packages using the `npm install` command, y
 
 ### Adding players
 
-Create a new `.js` file in the `players/` directory with a header which contains a `@hostname` variable. All files in the `players/` directory must start with a single-line JavaScript comment `//`. 
+Create a new `.js` file in the `players/` directory with a header which contains a `@hostname` variable. All files in the `players/` directory must start with a single-line JavaScript comment `//`.
 
 If you want to create a file to support a player located at `http://theawesomeplayer.com/`, the header must contain the following value:
 
@@ -43,7 +43,7 @@ The `@hostname` variable is mandatory and must not be omitted. It may have sever
 
 ```
 // @hostname = helloworld.com helloworld.net helloworld.org
-``` 
+```
 
 The header may or may not have any other content, but all the first lines in a file must start with `//`. Please see existing player implementations as an example.
 
@@ -57,11 +57,11 @@ After you added your player or changed its code, run `npm run gulp` to rebuild e
 
 ## Core API
 
-The core class is a set of methods and properties to interact with the desktop application (server). It implements a basic client-server protocol on top of the WebSockets connection. The connection itself is created and maintained by the `Simplify` class. It also automatically reconnects if the connection to server fails. 
+The core class is a set of methods and properties to interact with the desktop application (server). It implements a basic client-server protocol on top of the WebSockets connection. The connection itself is created and maintained by the `Simplify` class. It also automatically reconnects if the connection to server fails.
 
-Core API provides you with two types of methods. You can send various messages to the server to notify it about some important event on the client side. On the other hand, the server can also send various messages to the client, so Core API allows you to subscribe to incoming events to handle them appropriately. 
+Core API provides you with two types of methods. You can send various messages to the server to notify it about some important event on the client side. On the other hand, the server can also send various messages to the client, so Core API allows you to subscribe to incoming events to handle them appropriately.
 
-Note that you are not supposed to cache any data, like player names, track information, or artwork links. All cache is stored inside the core class. If the WebSockets connection to the server eventually fails, the client will restore everything when the connection becomes available.  
+Note that you are not supposed to cache any data, like player names, track information, or artwork links. All cache is stored inside the core class. If the WebSockets connection to the server eventually fails, the client will restore everything when the connection becomes available.
 
 ### Initialization
 
@@ -85,7 +85,7 @@ var simplify = new Simplify();
 window.addEventListener("unload", function()
 {
 	simplify.closeCurrentPlayer();
-}); 	
+});
 ```
 
 ### setNewPlaybackState(state)
@@ -102,7 +102,7 @@ You can also use one of the predefined methods to change the playback state: `se
 
 ### setCurrentTrack(track)
 
-Sends the information about the current track to the server. This method should be called when a track change occurs. This method must not be called on a playback state change. 
+Sends the information about the current track to the server. This method should be called when a track change occurs. This method must not be called on a playback state change.
 
 `track` is a dictionary of values. You fill it with all known information about the current track:
 
@@ -136,7 +136,7 @@ You do not need to cache any information about the track. The core class caches 
 
 ### setCurrentArtwork(uri)
 
-Notifies the server about a new artwork for the current track. You should supply either an absolute URI to some artwork or `null` as an `uri` argument. If it is `null`, server will try to find an artwork for this track by itself. 
+Notifies the server about a new artwork for the current track. You should supply either an absolute URI to some artwork or `null` as an `uri` argument. If it is `null`, server will try to find an artwork for this track by itself.
 
 ### bindToVolumeRequest(callback)
 
@@ -162,9 +162,9 @@ simplify.bindToTrackPositionRequest(function()
 
 ### bind(name, callback)
 
-Adds new handler to the specified event. The first argument `name` is one of the predefined names of messages. The second argument `callback` is a function that will be called when an event arrives. 
+Adds new handler to the specified event. The first argument `name` is one of the predefined names of messages. The second argument `callback` is a function that will be called when an event arrives.
 
-All events are sent by the server as a reaction to any user actions in the desktop application. For example, when user modifies volume inside Simplify.app, server sends `Simplify.MESSAGE_DID_CHANGE_VOLUME` to us, and we need to handle it appropriately. 
+All events are sent by the server as a reaction to any user actions in the desktop application. For example, when user modifies volume inside Simplify.app, server sends `Simplify.MESSAGE_DID_CHANGE_VOLUME` to us, and we need to handle it appropriately.
 
 You are able to call the function like this:
 
@@ -184,11 +184,11 @@ All message types are described below.
 
 Previous track should be selected.
 
-#### Simplify.MESSAGE_DID_SELECT_NEXT_TRACK 
+#### Simplify.MESSAGE_DID_SELECT_NEXT_TRACK
 
 Next track should be selected.
-		
-#### Simplify.MESSAGE_DID_CHANGE_PLAYBACK_STATE 	
+
+#### Simplify.MESSAGE_DID_CHANGE_PLAYBACK_STATE
 
 Playback state should be changed. The server pushes `data["state"]` with a desired state:
 
@@ -203,12 +203,12 @@ Example of usage:
 ```
 simplify.bind(Simplify.MESSAGE_DID_CHANGE_PLAYBACK_STATE, function(data)
 {
-	if (data["state"] == Simplify.PLAYBACK_STATE_PLAYING) { /* Play current song */ }; 
+	if (data["state"] == Simplify.PLAYBACK_STATE_PLAYING) { /* Play current song */ };
 	if (data["state"] == Simplify.PLAYBACK_STATE_PAUSED) { /* Pause current song */ };
 });
 ```
 
-#### Simplify.MESSAGE_DID_CHANGE_VOLUME 				
+#### Simplify.MESSAGE_DID_CHANGE_VOLUME
 
 Current volume of the player should be changed. Use `data["amount"]` to retrieve new volume, which will be in an interval between 0 and 100.
 
@@ -223,7 +223,7 @@ simplify.bind(Simplify.MESSAGE_DID_CHANGE_VOLUME, function(data)
 
 #### Simplify.MESSAGE_DID_CHANGE_TRACK_POSITION
 
-Current track position should be modified. Use `data["amount"]` to retrieve new position in seconds. 
+Current track position should be modified. Use `data["amount"]` to retrieve new position in seconds.
 
 Example of usage:
 
@@ -240,7 +240,7 @@ A service message to notify the client that the server was shut down by a user (
 
 ## Usage tips
 
-Subscribe to the DOM `loaded` event and create an instance of the `Simplify` class. The first and primary thing to do is to notify the server about the current player by using the `setCurrentPlayer` method. It should be called before any other methods. Set up all event listeners to handle incoming events and implement sending track information when a track changes in the web player.  
+Subscribe to the DOM `loaded` event and create an instance of the `Simplify` class. The first and primary thing to do is to notify the server about the current player by using the `setCurrentPlayer` method. It should be called before any other methods. Set up all event listeners to handle incoming events and implement sending track information when a track changes in the web player.
 
 A basic skeleton for handling players:
 
@@ -248,7 +248,7 @@ A basic skeleton for handling players:
 window.addEventListener("load", function()
 {
 	var simplify = new Simplify();
-	
+
 	simplify.setCurrentPlayer("My Favourite Player");
 
 	//Handle incoming events and send track information here
@@ -256,6 +256,6 @@ window.addEventListener("load", function()
 	window.addEventListener("unload", function()
 	{
 		simplify.closeCurrentPlayer();
-	}); 
+	});
 });
 ```
