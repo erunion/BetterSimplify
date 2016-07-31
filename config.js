@@ -1,27 +1,23 @@
-/* Various properties of the current Simplify Web Suite build */
+/* Various properties of the current BetterSimplify build */
 
 module.exports = {
+  // Version of the extension for both browsers
+  browsers: {
+    chrome: {
+      name: 'BetterSimplify.chromeextension',
+      version: '1.0.0',
+    }
+  },
 
-	//Version of the extension for both browsers
-	browsers : {
+  // Output build directory
+  buildDir: './build',
 
-		chrome : {
-			name : "BetterSimplify.chromeextension",
-			version : "1.0.0",
-		}
+  // Players directory contains all the players
+  playersDir: './players',
 
-	},
+  // Skeleton directory
+  skeletonDir: './skeleton',
 
-	//Output build directory
-	buildDir : "./build",
-
-	//Players directory contains all the players
-	playersDir : "./players",
-
-	//Skeleton directory
-	skeletonDir : "./skeleton",
-
-	//Simplify engine script
-	simplifyCoreScript : "./simplify.js"
-
+  // Simplify engine script
+  simplifyCoreScript: './simplify.js'
 }

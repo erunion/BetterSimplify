@@ -14,8 +14,8 @@ The repository contains files that are necessary to build extensions for Google 
 
 * `build/` contains the resulting directories with the production-ready extensions. You may not directly modify files in
   this directory, but instead you modify source files and use `gulp` to rebuild extensions again.
-* `players/` contains sources for all the players that can be used by Simplify Web Suite Core. They will be
-  automatically copied to the extension directories.
+* `players/` contains sources for all the players that can be used by BetterSimplify. They will be automatically copied
+  to the extension directories.
 * `skeleton/` contains files and templates that are necessary to automatically create extensions. Files that have
   `template.` part in it are interpreted as `EJS` templates and processed accordingly. All other files are copied to the
   appropriate extension directory.

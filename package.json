@@ -1,25 +1,24 @@
 {
-  "name": "simplify-web-suite",
-  "version": "1.6.0",
+  "name": "BetterSimplify",
+  "version": "1.0.0",
   "description": "Simplify Web Players suite with auto-build system.",
-  "main": "build.js",
   "scripts": {
     "gulp": "./node_modules/gulp/bin/gulp.js"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/mmth/simplify_web_suite_core"
+    "url": "http://github.com/erunion/BetterSimplify"
   },
   "keywords": [
     "simplify",
     "players"
   ],
-  "author": "Semibold Mammoth",
+  "author": "Jon Ursenbach",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mmth/simplify_web_suite_core/issues"
+    "url": "https://github.com/erunion/BetterSimplify/issues"
   },
-  "homepage": "https://github.com/mmth/simplify_web_suite_core",
+  "homepage": "https://github.com/erunion/BetterSimplify",
   "dependencies": {
     "async": "^1.0.0",
     "ejs": "^2.3.1",
