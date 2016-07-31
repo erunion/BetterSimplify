@@ -22,31 +22,21 @@
 
   		"matches":
   		[
-  		"*://8tracks.com/*", 
-"*://deezer.com/*", 
-"*://play.google.com/*", 
+  		"*://play.google.com/*", 
 "*://pandora.com/*", 
 "*://plex.tv/*", 
 "*://localhost/*", 
 "*://127.0.0.1/*", 
 "*://play.pocketcasts.com/*", 
-"*://feedwrangler.net/*", 
-"*://soundcloud.com/*", 
-"*://vk.com/*", 
-"*://music.yandex.ru/*"
+"*://soundcloud.com/*"
   		]
 	},
 
 	"web_accessible_resources" : ["data/simplify.js",
-								  "data/8tracks.js", 
-"data/deezer.js", 
-"data/google-music.js", 
+								  "data/google-music.js", 
 "data/pandora.js", 
 "data/plex.js", 
 "data/pocketcasts.js", 
-"data/podwrangler.js", 
-"data/soundcloud.js", 
-"data/vk.js", 
-"data/yamusic.js"
+"data/soundcloud.js"
 								]
 }
