@@ -1,36 +1,36 @@
 {
-	"name" : "BetterSimplify",
-	"version" : "<%= data.version %>",
-	"manifest_version" : 2,
-	"description" : "Simplify for web players: Pandora, Deezer, Vk, SoundCloud, and 8tracks",
+  "name": "BetterSimplify",
+  "version": "<%= data.version %>",
+  "manifest_version": 2,
+  "description": "Simplify for web players: Pandora, Pocket Casts, Google Music, and Plex.",
 
-	"content_scripts" : [
-		{
-			"run_at"  : "document_end",
-			"matches" : ["http://*/*", "https://*/*"],
-			"js" 		 : ["extensions.js"]
-		}
-	],
+  "content_scripts": [
+    {
+      "run_at" : "document_end",
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["extensions.js"]
+    }
+  ],
 
-	"icons": {
-		"16": "icon/icon16.png",
-		"48": "icon/icon48.png",
-		"128": "icon/icon128.png"
-	},
+  "icons": {
+    "16": "icon/icon16.png",
+    "48": "icon/icon48.png",
+    "128": "icon/icon128.png"
+  },
 
-	"externally_connectable": {
+  "externally_connectable": {
+      "matches":
+      [
+      <%- _.map(data.hosts, function(value, key) { return util.format('"*://%s/*"', key) }).join(", \n") %>
+      ]
+  },
 
-  		"matches":
-  		[
-  		<%- _.map(data.hosts, function(value, key) { return util.format('"*://%s/*"', key) }).join(", \n") %>
-  		]
-	},
-
-	"web_accessible_resources" : ["<%= path.join(data.dataDir, data.coreScriptName) %>",
-								  <%- _.map(data.players, function(value, key)
-								  	  { return util.format('"%s"',
-								  	  	path.join(data.dataDir, path.basename(key)))
-								  	  }).join(", \n")
-								  %>
-								]
+  "web_accessible_resources": [
+    "<%= path.join(data.dataDir, data.coreScriptName) %>",
+    <%- _.map(data.players, function(value, key)
+    { return util.format('"%s"',
+        path.join(data.dataDir, path.basename(key)))
+      }).join(", \n")
+    %>
+  ]
 }
