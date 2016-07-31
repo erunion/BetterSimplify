@@ -8,8 +8,7 @@
 "plex.tv" : "data/plex.js", 
 "localhost" : "data/plex.js", 
 "127.0.0.1" : "data/plex.js", 
-"play.pocketcasts.com" : "data/pocketcasts.js", 
-"soundcloud.com" : "data/soundcloud.js"
+"play.pocketcasts.com" : "data/pocketcasts.js"
   };
 
   // Checking if current site is listed

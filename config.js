@@ -5,7 +5,7 @@ module.exports = {
   browsers: {
     chrome: {
       name: 'BetterSimplify.chromeextension',
-      version: '1.0.0',
+      version: '1.0.0'
     }
   },
 

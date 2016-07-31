@@ -26,8 +26,7 @@
 "*://plex.tv/*", 
 "*://localhost/*", 
 "*://127.0.0.1/*", 
-"*://play.pocketcasts.com/*", 
-"*://soundcloud.com/*"
+"*://play.pocketcasts.com/*"
       ]
   },
 
@@ -36,7 +35,6 @@
     "data/google-music.js", 
 "data/pandora.js", 
 "data/plex.js", 
-"data/pocketcasts.js", 
-"data/soundcloud.js"
+"data/pocketcasts.js"
   ]
 }
