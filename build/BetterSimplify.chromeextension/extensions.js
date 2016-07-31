@@ -5,7 +5,7 @@
   var scripts = {
   "play.google.com" : "data/google-music.js", 
 "pandora.com" : "data/pandora.js", 
-"plex.tv" : "data/plex.js", 
+"app.plex.tv" : "data/plex.js", 
 "localhost" : "data/plex.js", 
 "127.0.0.1" : "data/plex.js", 
 "play.pocketcasts.com" : "data/pocketcasts.js"

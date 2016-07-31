@@ -23,7 +23,7 @@
       [
       "*://play.google.com/*", 
 "*://pandora.com/*", 
-"*://plex.tv/*", 
+"*://app.plex.tv/*", 
 "*://localhost/*", 
 "*://127.0.0.1/*", 
 "*://play.pocketcasts.com/*"

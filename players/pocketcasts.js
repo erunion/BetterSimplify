@@ -52,7 +52,7 @@
 
   if (window.top === window) {
     window.addEventListener('load', function () {
-      // Inject jquery into page
+      // Inject jQuery into page
       var body = document.getElementsByTagName('body')[0]
       var script = document.createElement('script')
       script.type = 'text/javascript'
